@@ -4,18 +4,26 @@ public class SistemPeminjaman08 {
 
     // Konstruktor
     public SistemPeminjaman08(int kuota) {
+        // Kapasitas awal bisa 0, nanti akan otomatis membesar 
         listPinjam = new Peminjaman08[kuota];
         index = 0;
     }
 
-    // Method tambah
     public void tambah(Peminjaman08 pinjam) {
-        if (index < listPinjam.length) {
-            listPinjam[index] = pinjam;
-            index++;
-        } else {
-            System.out.println("Kuota peminjaman sudah penuh!");
+        // Membuat array baru yang ukurannya lebih besar 1 dari array lama
+        Peminjaman08[] arrayBaru = new Peminjaman08[index + 1];
+        
+        // Menyalin data lama ke array baru
+        for (int i = 0; i < index; i++) {
+            arrayBaru[i] = listPinjam[i];
         }
+        
+        // Memasukkan data baru yang ada di posisi terakhir
+        arrayBaru[index] = pinjam;
+
+        // Menjadikan array baru disini sebagai array utama
+        listPinjam = arrayBaru;
+        index++;
     }
 
     // Method tampil semua data peminjaman
@@ -79,5 +87,26 @@ public class SistemPeminjaman08 {
         } else {
             System.out.println("NIM " + nimCari + " tidak ditemukan!");
         }
+    }
+
+    public void tampilStatistik() {
+        int totalDendaKeseluruhan = 0;
+        int jumlahTerlambat = 0;
+        int jumlahTepatWaktu = 0;
+
+        for (int i = 0; i < index; i++) {
+            totalDendaKeseluruhan += listPinjam[i].denda;
+
+            if (listPinjam[i].terlambat > 0) {
+                jumlahTerlambat++;
+            } else {
+                jumlahTepatWaktu++;
+            }
+        }
+
+        System.out.println("=== STATISTIK PEMINJAMAN ===");
+        System.out.println("Total Denda Keseluruhan: Rp " + totalDendaKeseluruhan);
+        System.out.println("Jumlah Peminjaman Terlambat: " + jumlahTerlambat);
+        System.out.println("Jumlah Peminjaman Tepat Waktu: " + jumlahTepatWaktu);
     }
 }
